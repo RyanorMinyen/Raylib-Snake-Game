@@ -1,56 +1,44 @@
 /*******************************************************************************************
 *
-*   raylib [shapes] example - Colors palette
+*   raylib [core] example - Basic window
 *
-*   This example has been created using raylib 2.5 (www.raylib.com)
+*   Welcome to raylib!
+*
+*   To test examples, just press F6 and execute raylib_compile_execute script
+*   Note that compiled executable is placed in the same folder as .c file
+*
+*   You can find all basic examples on C:\raylib\raylib\examples folder or
+*   raylib official webpage: www.raylib.com
+*
+*   Enjoy using raylib. :)
+*
+*   This example has been created using raylib 1.0 (www.raylib.com)
 *   raylib is licensed under an unmodified zlib/libpng license (View raylib.h for details)
 *
-*   Copyright (c) 2014-2019 Ramon Santamaria (@raysan5)
+*   Copyright (c) 2013-2016 Ramon Santamaria (@raysan5)
 *
 ********************************************************************************************/
 
-#include "raylib.h"
 
-#define MAX_COLORS_COUNT    21          // Number of colors available
+#include "Game.h"
+
+
+static void InitGame(void);         // Initialize game
+static void UpdateGame(void);       // Update game (one frame)
+static void DrawGame(void);         // Draw game (one frame)
+static void UnloadGame(void);       // Unload game
+static void UpdateDrawFrame(void);  // Update and Draw (one frame)
 
 //------------------------------------------------------------------------------------
 // Program main entry point
 //------------------------------------------------------------------------------------
 int main(void)
 {
-    // Initialization
-    //--------------------------------------------------------------------------------------
-    const int screenWidth = 800;
-    const int screenHeight = 450;
+   
+    InitWindow(screenWidth, screenHeight, "Snekky Game");
+    InitGame();
 
-    InitWindow(screenWidth, screenHeight, "raylib [shapes] example - colors palette");
-
-    Color colors[MAX_COLORS_COUNT] = {
-        DARKGRAY, MAROON, ORANGE, DARKGREEN, DARKBLUE, DARKPURPLE, DARKBROWN,
-        GRAY, RED, GOLD, LIME, BLUE, VIOLET, BROWN, LIGHTGRAY, PINK, YELLOW,
-        GREEN, SKYBLUE, PURPLE, BEIGE };
-
-    const char* colorNames[MAX_COLORS_COUNT] = {
-        "DARKGRAY", "MAROON", "ORANGE", "DARKGREEN", "DARKBLUE", "DARKPURPLE",
-        "DARKBROWN", "GRAY", "RED", "GOLD", "LIME", "BLUE", "VIOLET", "BROWN",
-        "LIGHTGRAY", "PINK", "YELLOW", "GREEN", "SKYBLUE", "PURPLE", "BEIGE" };
-
-    Rectangle colorsRecs[MAX_COLORS_COUNT] = { 0 };     // Rectangles array
-
-    // Fills colorsRecs data (for every rectangle)
-    for (int i = 0; i < MAX_COLORS_COUNT; i++)
-    {
-        colorsRecs[i].x = 20.0f + 100.0f * (i % 7) + 10.0f * (i % 7);
-        colorsRecs[i].y = 80.0f + 100.0f * (i / 7) + 10.0f * (i / 7);
-        colorsRecs[i].width = 100.0f;
-        colorsRecs[i].height = 100.0f;
-    }
-
-    int colorState[MAX_COLORS_COUNT] = { 0 };           // Color state: 0-DEFAULT, 1-MOUSE_HOVER
-
-    Vector2 mousePoint = { 0.0f, 0.0f };
-
-    SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
+    SetTargetFPS(30);               // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
 
     // Main game loop
@@ -58,45 +46,66 @@ int main(void)
     {
         // Update
         //----------------------------------------------------------------------------------
-        mousePoint = GetMousePosition();
-
-        for (int i = 0; i < MAX_COLORS_COUNT; i++)
-        {
-            if (CheckCollisionPointRec(mousePoint, colorsRecs[i])) colorState[i] = 1;
-            else colorState[i] = 0;
-        }
+        // TODO: Update your variables here
         //----------------------------------------------------------------------------------
 
         // Draw
         //----------------------------------------------------------------------------------
-        BeginDrawing();
-
-        ClearBackground(RAYWHITE);
-
-        DrawText("raylib colors palette", 28, 42, 20, BLACK);
-        DrawText("press SPACE to see all colors", GetScreenWidth() - 180, GetScreenHeight() - 40, 10, GRAY);
-
-        for (int i = 0; i < MAX_COLORS_COUNT; i++)    // Draw all rectangles
-        {
-            DrawRectangleRec(colorsRecs[i], Fade(colors[i], colorState[i] ? 0.6f : 1.0f));
-
-            if (IsKeyDown(KEY_SPACE) || colorState[i])
-            {
-                DrawRectangle((int)colorsRecs[i].x, (int)(colorsRecs[i].y + colorsRecs[i].height - 26), (int)colorsRecs[i].width, 20, BLACK);
-                DrawRectangleLinesEx(colorsRecs[i], 6, Fade(BLACK, 0.3f));
-                DrawText(colorNames[i], (int)(colorsRecs[i].x + colorsRecs[i].width - MeasureText(colorNames[i], 10) - 12),
-                    (int)(colorsRecs[i].y + colorsRecs[i].height - 20), 10, colors[i]);
-            }
-        }
-
-        EndDrawing();
+       // ComposeFrame();
+        UpdateDrawFrame();
         //----------------------------------------------------------------------------------
     }
 
     // De-Initialization
     //--------------------------------------------------------------------------------------
-    CloseWindow();                // Close window and OpenGL context
+    CloseWindow();        // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
 
     return 0;
+}
+
+void InitGame(void)
+{
+    brd.DrawFrame();
+    
+
+}
+
+void UpdateGame(void)
+{
+    if (IsKeyPressed(KEY_UP)) {
+        delta_loc = { 0,-1 };
+    }
+    else if (IsKeyPressed(KEY_DOWN)) {
+        delta_loc = { 0,1 };
+    }
+    else if (IsKeyPressed(KEY_LEFT)) {
+        delta_loc = { -1,0 };
+    }
+    else if (IsKeyPressed(KEY_RIGHT)) {
+        delta_loc = { 1,0 };
+    }
+
+    const Location next = snek.GetNextHeadLocation(delta_loc);
+    snek.Moveby(delta_loc);
+
+}
+
+void DrawGame(void)
+{
+    BeginDrawing();
+    snek.Draw(brd);
+    EndDrawing();
+
+}
+
+void UnloadGame(void)
+{
+    // does nothing as of now
+}
+
+void UpdateDrawFrame(void)
+{
+    UpdateGame();
+    DrawGame();
 }
