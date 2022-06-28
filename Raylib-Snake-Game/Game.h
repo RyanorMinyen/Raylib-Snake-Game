@@ -3,6 +3,7 @@
 #include "raylib.h"
 #include <string>
 #include "Board.h"
+#include "Snake.h"
 
 
 
@@ -30,4 +31,6 @@ private:
 private:
 
 	Board brd;
+	Snake snek;
+	Location delta_loc = { 1,0 };
 };
