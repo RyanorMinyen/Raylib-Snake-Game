@@ -2,6 +2,8 @@
 
 #include "Location.h"
 #include "raylib.h"
+#include <random>
+
 
 class Board {
 
@@ -12,6 +14,11 @@ public:
 	void DrawCell(const Location& loc, Color c) const;
 	bool IsInsideBoard(const Location& loc) const;
 	void DrawFrame();
+	void DrawGrid();
+	bool CheckForObstacles(const Location& loc) const;
+	// forward declaration
+	void SpawnObstacle(std::mt19937& rng, const class Snake& snek, const class Goal& goal);
+	void DrawObstacle();
 private:
 
 	static constexpr int width = 35;
@@ -20,5 +27,7 @@ private:
 	static constexpr int boarder_padding = 50;
 	static constexpr int frame_thickness = 5;
 	static constexpr int cell_padding = 1;
+	static constexpr Color obstacleColor = BLACK;
+	bool hasObstacles[width * height] = { false };
 
 };

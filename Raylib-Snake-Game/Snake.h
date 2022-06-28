@@ -25,6 +25,8 @@ public:
 	void Grow();
 	void Draw(Board& brd) const;
 	Location GetNextHeadLocation(const Location& delta_loc) const;
+	bool IsInTileExceptEnd(const Location& target) const;
+	bool IsInTile(const Location& target) const;
 
 
 private:

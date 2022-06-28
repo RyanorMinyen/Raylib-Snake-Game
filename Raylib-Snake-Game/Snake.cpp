@@ -6,10 +6,10 @@ Snake::Snake(const Location& loc_in)
 {
 	constexpr int nBodyColors = 4;
 	constexpr Color bodyColors[nBodyColors] = {
-		{0,10,100,32},
-		{0,10,130,48},
-		{0,18,160,48},
-		{0,10,130,48}
+		GREEN,
+		LIME,
+		DARKGREEN,
+		LIME
 	};
 
 	for (int i = 0; i < nSegmentsMax; i++) {
@@ -81,4 +81,28 @@ void Snake::Segment::MoveBy(const Location& delta_loc)
 const Location& Snake::Segment::GetLocation() const
 {
 	return loc;
+}
+
+bool Snake::IsInTileExceptEnd(const Location& target) const
+{
+	for (int i = 0; i < nSegments - 1; i++) {
+		if (segments[i].GetLocation() == target) {
+
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool Snake::IsInTile(const Location& target) const
+{
+	for (int i = 0; i < nSegments; i++) {
+		if (segments[i].GetLocation() == target) {
+
+			return true;
+		}
+	}
+
+	return false;
 }

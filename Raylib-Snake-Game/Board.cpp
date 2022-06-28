@@ -1,5 +1,7 @@
 #include "Board.h"
 #include <assert.h>
+#include "Snake.h"
+#include "Goal.h"
 
 int Board::GetGridHeight() const
 {
@@ -59,4 +61,53 @@ void Board::DrawFrame()
 			DrawPixel(i, j, BLUE);
 		}
 	}
+}
+
+void Board::DrawGrid()
+{
+	for (int y = 0; y < height; y++) {
+		for (int x = 0; x < width; x++) {
+			DrawCell({ x,y }, RAYWHITE);
+		}
+	}
+}
+
+bool Board::CheckForObstacles(const Location& loc) const
+{
+	return hasObstacles[loc.y * width + loc.x];
+}
+
+void Board::SpawnObstacle(std::mt19937& rng, const Snake& snek, const Goal& goal)
+{
+	std::uniform_int_distribution<int> xDist(0, GetGridWidth() - 1);
+	std::uniform_int_distribution<int> yDist(0, GetGridHeight() - 1);
+
+
+	Location newloc;
+	do {
+
+		newloc.x = xDist(rng);
+		newloc.y = yDist(rng);
+
+	} while (snek.IsInTile(newloc) || newloc == goal.GetLocation() || CheckForObstacles(newloc));
+
+	hasObstacles[newloc.y * width + newloc.x] = true;
+}
+
+void Board::DrawObstacle()
+{
+	for (int y = 0; y < height; y++) {
+
+		for (int x = 0; x < width; x++) {
+
+			if (CheckForObstacles({ x, y })) {
+				DrawCell({ x,y }, obstacleColor);
+			}
+		}
+	}
+
+
+
+
+
 }

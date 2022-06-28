@@ -4,6 +4,7 @@
 #include <string>
 #include "Board.h"
 #include "Snake.h"
+#include "Goal.h"
 
 
 
@@ -33,4 +34,9 @@ private:
 	Board brd;
 	Snake snek;
 	Location delta_loc = { 1,0 };
+	bool GameOver = false;
+	bool isStarted = false;
+	std::mt19937 rng;
+	Goal goal;
+
 };
