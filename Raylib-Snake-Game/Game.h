@@ -38,5 +38,11 @@ private:
 	bool isStarted = false;
 	std::mt19937 rng;
 	Goal goal;
+	float snekMovePeriod = 0.4f;
+	static constexpr float snekMovePeriodMin = 0.06f;
+	static constexpr float snekSpeedUpFactor = 0.05f;
+	float snekMoveCounter = 0.0f;
+	const int obstacleSpawnPeiord = 3; // spawn one every 3 goals
+	int goalCounter = 0;
 
 };

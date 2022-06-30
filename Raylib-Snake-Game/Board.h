@@ -27,7 +27,7 @@ private:
 	static constexpr int boarder_padding = 50;
 	static constexpr int frame_thickness = 5;
 	static constexpr int cell_padding = 1;
-	static constexpr Color obstacleColor = BLACK;
+	static constexpr Color obstacleColor = Color{26,77,46,255};
 	bool hasObstacles[width * height] = { false };
 
 };

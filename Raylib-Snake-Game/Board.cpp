@@ -41,24 +41,24 @@ void Board::DrawFrame()
 
 	for (int i = box_rightend; i < box_rightend + frame_thickness; i++) {
 		for (int j = box_topstart; j < box_bottomend + 5; j++)
-			DrawPixel(i, j, BLUE);
+			DrawPixel(i, j, { 55, 125, 113, 255 }); //#377D71
 	}
 
 	for (int i = box_leftstart; i < boarder_padding; i++) {
 		for (int j = box_topstart; j < box_bottomend + 5; j++)
-			DrawPixel(i, j, BLUE);
+			DrawPixel(i, j, { 55, 125, 113, 255 }); //#377D71
 	}
 
 	for (int i = boarder_padding; i < box_rightend; i++) {
 		for (int j = box_topstart; j < boarder_padding; j++) {
-			DrawPixel(i, j, BLUE);
+			DrawPixel(i, j, { 55, 125, 113, 255 });//#377D71
 		}
 	}
 
 
 	for (int i = boarder_padding; i < box_rightend; i++) {
 		for (int j = box_bottomend; j < box_bottomend + frame_thickness; j++) {
-			DrawPixel(i, j, BLUE);
+			DrawPixel(i, j, { 55, 125, 113, 255 });//#377D71
 		}
 	}
 }
@@ -67,7 +67,7 @@ void Board::DrawGrid()
 {
 	for (int y = 0; y < height; y++) {
 		for (int x = 0; x < width; x++) {
-			DrawCell({ x,y }, RAYWHITE);
+			DrawCell({ x,y }, { 55, 125, 113, 50 }); //#377D71 with 50 alpha
 		}
 	}
 }
