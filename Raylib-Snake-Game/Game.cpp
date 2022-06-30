@@ -33,6 +33,8 @@ void Game::Tick()
 
 void Game::Update()
 {
+	const float dt = GetFrameTime();
+
 	if (IsKeyPressed(KEY_ENTER)) {
 		isStarted = true;
 	}
@@ -53,39 +55,50 @@ void Game::Update()
 			delta_loc = { 0,1 };
 		}
 
-		Location next = snek.GetNextHeadLocation(delta_loc);
-		if (!brd.IsInsideBoard(next) || snek.IsInTileExceptEnd(next) ||
-			brd.CheckForObstacles(next)) {
-			GameOver = true;
-		}
-		else {
-			bool isEating = next == goal.GetLocation();
-			if (isEating) {
-				snek.Grow();
-				//prg.UpdateProgress();
-			}
-			snek.MoveBy(delta_loc);
-
-			if (isEating) { // respawn after we grow, since we need to check the snek segments
-							// goal respawn
-				goal.Respawn(rng, brd, snek);
-			    brd.SpawnObstacle(rng, snek, goal);
-			}
-		}
+		snekMoveCounter += dt;
 		
+		if (snekMoveCounter >= snekMovePeriod) {
+			snekMoveCounter -= snekMovePeriod;
+			
+			Location next = snek.GetNextHeadLocation(delta_loc);
+			if (!brd.IsInsideBoard(next) || snek.IsInTileExceptEnd(next) ||
+				brd.CheckForObstacles(next)) {
+				GameOver = true;
+			}
+			else {
+				bool isEating = next == goal.GetLocation();
+				if (isEating) {
+					snek.Grow();
+					//prg.UpdateProgress();
+				}
+				snek.MoveBy(delta_loc);
+
+				if (isEating) { // respawn after we grow, since we need to check the snek segments
+								// goal respawn
+					goal.Respawn(rng, brd, snek);
+					goalCounter++;
+					if (goalCounter >= 3) {
+						goalCounter = 0;
+						brd.SpawnObstacle(rng, snek, goal);
+					}
+					
+				}
+			}
+		}
+		snekMovePeriod = std::max(snekMovePeriod - dt * snekSpeedUpFactor, snekMovePeriodMin);
 	}
 }
 
 void Game::Draw()
 {
 
-	ClearBackground({ 100, 0, 116, 200});
+	ClearBackground({242,242,242,255}); //F2F2F2
 	
 
 	// brd.DrawCell({ 20,20 }, BLUE);
 
 	if (!isStarted) {
-		DrawText("Press enter to start your game!", 230, 300, 20, LIGHTGRAY);
+		DrawText("Press enter to start your game!", 230, 300, 20, { 136, 121, 176,255 });
 	}
 	else {
 		brd.DrawFrame();
@@ -95,7 +108,7 @@ void Game::Draw()
 		brd.DrawObstacle();
 
 		if (GameOver) {
-			DrawText("You loser", 350, 300, 20, LIGHTGRAY);
+			DrawText("You loser", 350, 300, 20, { 136, 121, 176,255 });
 		}
 	}
 

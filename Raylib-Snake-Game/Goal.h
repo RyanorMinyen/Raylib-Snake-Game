@@ -15,7 +15,7 @@ public:
 private:
 
 	Location loc;
-	Color c = RED;
+	Color c = { 136, 121, 176,255 };
 	//bool colorIncreasing = true;
 
 };

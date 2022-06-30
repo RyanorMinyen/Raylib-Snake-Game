@@ -34,7 +34,7 @@ private:
 	Segment segments[nSegmentsMax];
 	int nSegments = 1;
 
-	static constexpr Color headColor = YELLOW;
+	static constexpr Color headColor = { 136, 121, 176,255 };
 
 
 
