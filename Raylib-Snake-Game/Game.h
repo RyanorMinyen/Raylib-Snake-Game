@@ -37,12 +37,19 @@ private:
 	bool GameOver = false;
 	bool isStarted = false;
 	std::mt19937 rng;
-	Goal goal;
-	float snekMovePeriod = 0.4f;
-	static constexpr float snekMovePeriodMin = 0.06f;
-	static constexpr float snekSpeedUpFactor = 0.05f;
+
+
+	// 1 Second = 1000 Milliseconds
+	// target60FPS = 16.67 milliseconds per frame
+	float snekMovePeriod = 0.35f; // start off 0.3 second = 300 Milliseconds per move, 18 frames per move
+	static constexpr float snekMovePeriodMin = 0.07f; //0.07 seconds = 70 Milliseconds per move
+	static constexpr float snekSpeedUpFactor = 0.9f;
+	static constexpr int nPoison = 240;
+	static constexpr int nFood = 8;
+	static constexpr float snekMovePeriodSpeedUp = 0.15f;
 	float snekMoveCounter = 0.0f;
 	const int obstacleSpawnPeiord = 3; // spawn one every 3 goals
 	int goalCounter = 0;
+	int lives = 3;
 
 };

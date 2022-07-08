@@ -1,7 +1,7 @@
 #include "Board.h"
 #include <assert.h>
 #include "Snake.h"
-#include "Goal.h"
+
 
 int Board::GetGridHeight() const
 {
@@ -67,17 +67,24 @@ void Board::DrawGrid()
 {
 	for (int y = 0; y < height; y++) {
 		for (int x = 0; x < width; x++) {
-			DrawCell({ x,y }, { 55, 125, 113, 50 }); //#377D71 with 50 alpha
+			DrawCell({ x,y }, { 55, 125, 113, 20 }); //#377D71 with 50 alpha
 		}
 	}
 }
 
-bool Board::CheckForObstacles(const Location& loc) const
+int Board::GetContents(const Location& loc) const
 {
-	return hasObstacles[loc.y * width + loc.x];
+	return contents[loc.y * width + loc.x];
 }
 
-void Board::SpawnObstacle(std::mt19937& rng, const Snake& snek, const Goal& goal)
+void Board::ConsumeContents(const Location& loc)
+{
+	assert(GetContents(loc) == 2 || GetContents(loc) == 3);
+	contents[loc.y * width + loc.x] = 0; // cell is empty after eating
+
+}
+
+void Board::SpawnContents(std::mt19937& rng, const Snake& snek, int content)
 {
 	std::uniform_int_distribution<int> xDist(0, GetGridWidth() - 1);
 	std::uniform_int_distribution<int> yDist(0, GetGridHeight() - 1);
@@ -89,19 +96,28 @@ void Board::SpawnObstacle(std::mt19937& rng, const Snake& snek, const Goal& goal
 		newloc.x = xDist(rng);
 		newloc.y = yDist(rng);
 
-	} while (snek.IsInTile(newloc) || newloc == goal.GetLocation() || CheckForObstacles(newloc));
+	} while (snek.IsInTile(newloc) || GetContents(newloc) != 0);
 
-	hasObstacles[newloc.y * width + newloc.x] = true;
+	contents[newloc.y * width + newloc.x] = content;
 }
 
-void Board::DrawObstacle()
+
+
+void Board::DrawCells()
 {
 	for (int y = 0; y < height; y++) {
 
 		for (int x = 0; x < width; x++) {
 
-			if (CheckForObstacles({ x, y })) {
+			const int contents = GetContents({ x,y });
+			if (contents == 1) {
 				DrawCell({ x,y }, obstacleColor);
+			}
+			else if (contents == 2) {
+				DrawCell({ x,y }, foodColor);
+			}
+			else if (contents == 3) {
+				DrawCell({ x,y }, poisonColor);
 			}
 		}
 	}

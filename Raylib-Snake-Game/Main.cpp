@@ -1,6 +1,7 @@
 
 #include "Game.h"
 
+
 //------------------------------------------------------------------------------------
 // Program main entry point
 //------------------------------------------------------------------------------------
@@ -10,7 +11,8 @@ int main(void)
     //--------------------------------------------------------------------------------------
     const int screenWidth = 800;
     const int screenHeight = 600;
-    SetTargetFPS(15);
+    
+    SetTargetFPS(60);
 
     Game game = { screenWidth, screenHeight, "Raylib Snek" };
    
@@ -18,6 +20,6 @@ int main(void)
         game.Tick();
     }
     
-
+ 
     return 0;
 }
